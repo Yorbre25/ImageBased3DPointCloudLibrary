@@ -20,20 +20,12 @@ class DepthEstimationPipelineManager:
     def load_pipeline(self):
         return pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Small-hf")
 
-
-def validate_image_path(image_path: str):
-    if not os.path.exists(image_path):
-        raise FileNotFoundError(f"Image file not found: {image_path}")
-    if not image_path.endswith((".png", ".jpg", ".JPEG")):
-        raise ValueError("Image file must be a .jpg, .png or .jpeg file")
-
 def depth_estimation_from_image(
-        image_path: str, 
+        image: np.ndarray, 
         api: bool = True,
 ):
-    validate_image_path(image_path)
-    
-    image = Image.open(image_path)
+    image = Image.fromarray(image)
+
 
     if api:
         depth_estimation_pipeline = DepthEstimationPipelineManager().get_pipeline()
