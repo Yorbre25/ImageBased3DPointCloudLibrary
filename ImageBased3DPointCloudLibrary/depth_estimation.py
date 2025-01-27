@@ -21,25 +21,19 @@ class DepthEstimationPipelineManager:
         return pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Small-hf")
 
 
-# def preprocess_image(image: Image, shape: tuple[int,int]) -> Image:
-#     resized_image = image.resize(shape)
-#     return resized_image
-
 def validate_image_path(image_path: str):
     if not os.path.exists(image_path):
         raise FileNotFoundError(f"Image file not found: {image_path}")
-    if not image_path.endswith((".png", ".jpg", ".jpeg")):
-        raise ValueError("Image file must be a .jpg file")
+    if not image_path.endswith((".png", ".jpg", ".JPEG")):
+        raise ValueError("Image file must be a .jpg, .png or .jpeg file")
 
 def depth_estimation_from_image(
         image_path: str, 
-        # shape: tuple[int,int] = (640,480),
         api: bool = True,
 ):
     validate_image_path(image_path)
     
     image = Image.open(image_path)
-    # image = preprocess_image(image, shape)
 
     if api:
         depth_estimation_pipeline = DepthEstimationPipelineManager().get_pipeline()
