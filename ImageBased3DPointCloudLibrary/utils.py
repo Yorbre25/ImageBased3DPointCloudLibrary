@@ -13,6 +13,7 @@ def get_intrinsics(H, W, fov=55):
     Returns:
         - np.ndarray: The intrinsic matrix of the camera.
     """
+    validate_input(H, W, fov)
     f = 0.5 * W / np.tan(0.5 * fov * np.pi / 180)
     cx = 0.5 * W
     cy = 0.5 * H
@@ -36,3 +37,14 @@ def draw_two_clouds(pcd1, pcd2, transformation=None, diff_color=True):
     if transformation is not None:
         pcd1_temp.transform(transformation)
     o3d.visualization.draw_geometries([pcd1_temp, pcd2_temp])
+
+
+def validate_input(H, W, fov):
+    if H == 0 or W == 0:
+        raise ZeroDivisionError("Height and width must be greater than zero.")
+    if H < 0 or W < 0:
+        raise ValueError("Height and width must be positive.")
+    if fov <= 0 or fov > 180:
+        raise ValueError("Field of view must be in the range [0, 180].")
+    if not isinstance(H, int) or not isinstance(W, int) or not isinstance(fov, int):
+        raise TypeError("Height, width and field of view must be integers.")
