@@ -23,21 +23,16 @@ class _DepthEstimationPipelineManager:
             task="depth-estimation",
             model="depth-anything/Depth-Anything-V2-Small-hf",
             force_download=True,
-            revision="main",
         )
 
 
-def depth_estimation_from_image(
-    image: np.ndarray,
-    api: bool = True,
-):
+def depth_estimation_from_image(image: np.ndarray):
     """
     This function returns the depth estimation of an image. There is no unit for the depth estimation; it is just a relative value.
     The bigger the number, the further the object is from the camera.
 
     Args:
         - image (np.ndarray): The input image as a NumPy array.
-        - api (bool): Flag to determine whether to use the API for depth estimation. Default is True.
 
     Returns:
         - np.ndarray: The depth estimation of the image as a NumPy array. The NumPy array shape will be bigger than the input image.
@@ -45,12 +40,17 @@ def depth_estimation_from_image(
 
     image = Image.fromarray(image)
 
-    if api:
-        depth_estimation_pipeline = _DepthEstimationPipelineManager().get_pipeline()
-        result = depth_estimation_pipeline(image)
-        depth_map_tensor = result["predicted_depth"]
-        depth_estimation = depth_map_tensor[0].numpy()
-    else:
-        raise Exception("Not implemented yet")
+    depth_estimation_pipeline = _DepthEstimationPipelineManager().get_pipeline()
+    result = depth_estimation_pipeline(image)
+    depth_map_tensor = result["predicted_depth"]
+
+    # Depending on the torch version (I think),
+    # the depth_estimation is one level deeper.
+    # The next line is to handle that.
+    depth_estimation = (
+        depth_map_tensor.numpy()
+        if depth_map_tensor.ndim == 2
+        else depth_map_tensor[0].numpy()
+    )
 
     return depth_estimation
