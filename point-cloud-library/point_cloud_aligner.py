@@ -24,11 +24,13 @@ class AlignmentResult:
     def is_good_alignment(self, fitness_threshold=0.5, rmse_threshold=1.0):
         """
         Returns True if alignment is considered successful based on thresholds.
+
         Args:
-            - fitness_threshold (float): The fitness threshold. Default is 0.5
-            - rmse_threshold (float): The RMSE threshold. Default is 1.0
+            fitness_threshold (float): The fitness threshold. Default is 0.5.
+            rmse_threshold (float): The RMSE threshold. Default is 1.0.
+
         Returns:
-            - bool: True if alignment is considered successful based on thresholds.
+            bool: True if alignment is considered successful based on thresholds.
         """
         return self.fitness > fitness_threshold and self.inlier_rmse < rmse_threshold
 
