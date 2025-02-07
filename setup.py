@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="ImageBased3DPointCloudLibrary",
+    name="point-cloud-library",
     version="0.1",
     packages=find_packages(),
     description="Python library for image processing, focused on 3D environment modeling. This project is part of the final graduation project at the Costa Rica Institute of Technology.",
