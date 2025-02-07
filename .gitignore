@@ -4,7 +4,8 @@ __pycache__
 pruebas.py
 modules.rst
 _build/
-build/*
+build/
+dist/
 doctrees/
 *.doctree
 *.pyc

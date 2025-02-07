@@ -1,28 +1,106 @@
-# PlaceHolder
+# PointCloudLib
 
-Python library for image processing, focused on 3D environment modeling. This project is part of the final graduation project at the Costa Rica Institute of Technology.
+This Python library is designed for image processing with a focus on 3D environment modeling. It is part of the final graduation project at the Costa Rica Institute of Technology.
 
-Use of Sphinx for documentation.
-Uso de pytorch para depth estimation (2.5.1)
+## Requirements:
 
-# Necesita:
+The project was developed using Python 3.12. It is recommended to use this version to avoid compatibility issues. Below is a list of the required dependencies to run the project:
 
-El proyecto se realizó utilizando python 3.12, por lo que se recomienda utilizar esta versión para evitar problemas de compatibilidad. A continuación se muestra una lista de las dependencias necesarias para ejecutar el proyecto:
 - transformers==4.48.0
 - pillow==11.1.0
 - open3d==0.19.0
 - opencv-python==4.11.0.86
 - torch==2.6.0
-- sphinx==8.1.3 (para documentación)
+- sphinx==8.1.3 (for documentation)
 
-# Debo agregar a la docu (readme):
+The library is available for installation on pip. To install the latest version, simply run the following command:
 
-## Descripción general
+```
+pip install pointcloudlib
+```
+## Generating Documentation
 
-## Instalación
+To generate the project documentation, navigate to the docs folder and run the following command:
 
-## Uso basico
+```
+cd docs
+make.bat html
+```
 
-## Docu. Adicional
+Once the documentation is generated, you can view it in the `docs/_build/html/index.html file.`
 
-## Licencia
+## Library Functions
+
+The library provides the following key functions:
+- `depth_estimation_from_image()`: Estimates the depth of an RGB image using a deep learning model.
+- `point_cloud_from_image()`:  Generates a point cloud from an RGB image and its corresponding depth image.
+- `align_point_clouds()`: Aligns two point clouds using FPFH (Fast Point Feature Histograms).
+
+Additionally, the library includes a function to visualize two aligned point clouds:
+- `draw_two_point_clouds()`: Displays two aligned point clouds in the same window.
+
+
+## Demo
+
+A demo of the library can be found in `demo/generic_pipeline.py`. The following code snippet demonstrates how to load images, estimate depth, generate point clouds, and align them.
+
+
+```
+import cv2
+from pointcloudlib import *
+
+image_path1 = "house_left.JPEG"
+image_path2 = "house_right.JPEG"
+
+image1 = cv2.imread(image_path1, cv2.IMREAD_COLOR)
+image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
+
+image2 = cv2.imread(image_path2, cv2.IMREAD_COLOR)
+image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2RGB)
+```
+
+Two RGB images from the resources folder are used:
+
+![Image](resources/house_right.JPEG)
+![Image](resources/house_left.JPEG)
+
+```
+depth_estimation1 = depth_estimation_from_image(image1)
+depth_estimation2 = depth_estimation_from_image(image2)
+```
+
+The depth map for each image is calculated. Below is the depth map for image 1, converted to grayscale (this step is not shown in the demo code):
+
+![Image](resources/house_left_depth.JPEG)
+
+
+Next, point clouds are generated from the images and their corresponding depth maps:
+```
+source = point_cloud_from_image(image1, depth_estimation1)
+target = point_cloud_from_image(image2, depth_estimation2)
+```
+
+Statistical outliers are removed from the point clouds to improve the accuracy of the alignment:
+
+```
+cl, ind = source.remove_statistical_outlier(nb_neighbors=20, std_ratio=2)
+source = source.select_by_index(ind)
+cl, ind = target.remove_statistical_outlier(nb_neighbors=20, std_ratio=2)
+target = target.select_by_index(ind)
+```
+Below is the point cloud for image 1 after removing outliers:
+
+![Image](resources/house_left_pcd.gif)
+
+The point clouds are aligned, and the results are displayed:
+```
+result = align_point_clouds(source, target)
+print(vars(result))
+draw_two_clouds(source, target, result.transformation, diff_color=False)
+```
+
+The final result of the alignment is shown in the following gif:
+
+![Image](resources/house_aligment.gif)
+
+
