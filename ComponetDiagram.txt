@@ -1,0 +1,15 @@
+@startuml
+[DepthMapGenenerator] as dm
+[PointCloudAligner] as reg
+[MultiPointCloudAligner] as mreg
+mreg --> reg
+mreg -> Interface1
+[PointCloudGenerator] as pcd
+pcd--> dm
+pcd -> Interface2
+
+[3DModelingPipelineExecutor] as md
+md --> mreg
+md --> pcd
+md -> Interface3
+@enduml

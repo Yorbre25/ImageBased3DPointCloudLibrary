@@ -1,0 +1,12 @@
+__pycache__
+pruebas.py
+modules.rst
+_build/
+build/
+dist/
+doctrees/
+*.doctree
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
