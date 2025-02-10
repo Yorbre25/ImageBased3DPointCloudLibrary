@@ -71,7 +71,7 @@ depth_estimation2 = depth_estimation_from_image(image2)
 
 The depth map for each image is calculated. Below is the depth map for image 1, converted to grayscale (this step is not shown in the demo code):
 
-![Image](resources/house_left_depth.JPEG)
+![Image](resources/house_left_depth.png)
 
 
 Next, point clouds are generated from the images and their corresponding depth maps:
@@ -92,15 +92,26 @@ Below is the point cloud for image 1 after removing outliers:
 
 ![Image](resources/house_left_pcd.gif)
 
-The point clouds are aligned, and the results are displayed:
+The point clouds are aligned, An object called AlignmentResult is returned with the alignment result:
 ```
 result = align_point_clouds(source, target)
-print(vars(result))
-draw_two_clouds(source, target, result.transformation, diff_color=False)
+result.print_result()
 ```
+
+The alignment result is shown below:
+![Image](resources/alignment_result.png)
+
+The alignment result can be checked to determine if it is a good alignment:
+
+```
+print(f"Is it a good aligmnet?: {result.is_good_alignment()}")
+```
+![Image](resources/is_good_alignment.png)
+
+
 
 The final result of the alignment is shown in the following gif:
 
-![Image](resources/house_aligment.gif)
+![Image](resources/house_alignment.gif)
 
 

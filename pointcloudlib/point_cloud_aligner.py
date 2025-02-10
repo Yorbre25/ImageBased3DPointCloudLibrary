@@ -21,6 +21,23 @@ class AlignmentResult:
         self.target_downsampled_length = None
         self.transformation = None
 
+    def print_result(self):
+        """
+        Prints the results of the alignment process.
+        """
+        print(f"Voxel size: {self.voxel_size}")
+        print(f"Radius normal: {self.radius_normal}")
+        print(f"Radius feature: {self.radius_feature}")
+        print(f"Distance threshold: {self.distance_threshold}")
+        print(f"Fitness: {self.fitness}")
+        print(f"Inlier RMSE: {self.inlier_rmse}")
+        print(f"Correspondence set size: {self.correspondence_set_size}")
+        print(f"Source initial length: {self.source_initial_length}")
+        print(f"Source downsampled length: {self.source_downsampled_length}")
+        print(f"Target initial length: {self.target_initial_length}")
+        print(f"Target downsampled length: {self.target_downsampled_length}")
+        print(f"Transform: {self.transformation}")
+
     def is_good_alignment(self, fitness_threshold=0.5, rmse_threshold=1.0):
         """
         Returns True if alignment is considered successful based on thresholds.
